@@ -29,8 +29,78 @@ class FanVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by FanParser#expr.
-    def visitExpr(self, ctx:FanParser.ExprContext):
+    # Visit a parse tree produced by FanParser#InList.
+    def visitInList(self, ctx:FanParser.InListContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FanParser#PlusAndMinus.
+    def visitPlusAndMinus(self, ctx:FanParser.PlusAndMinusContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FanParser#String.
+    def visitString(self, ctx:FanParser.StringContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FanParser#Print.
+    def visitPrint(self, ctx:FanParser.PrintContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FanParser#InField.
+    def visitInField(self, ctx:FanParser.InFieldContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FanParser#Number.
+    def visitNumber(self, ctx:FanParser.NumberContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FanParser#MulAndDiv.
+    def visitMulAndDiv(self, ctx:FanParser.MulAndDivContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FanParser#Assign.
+    def visitAssign(self, ctx:FanParser.AssignContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FanParser#Id.
+    def visitId(self, ctx:FanParser.IdContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FanParser#Boolean.
+    def visitBoolean(self, ctx:FanParser.BooleanContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FanParser#If.
+    def visitIf(self, ctx:FanParser.IfContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FanParser#Power.
+    def visitPower(self, ctx:FanParser.PowerContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FanParser#BooleanExpr.
+    def visitBooleanExpr(self, ctx:FanParser.BooleanExprContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FanParser#Paren.
+    def visitParen(self, ctx:FanParser.ParenContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FanParser#array.
+    def visitArray(self, ctx:FanParser.ArrayContext):
         return self.visitChildren(ctx)
 
 

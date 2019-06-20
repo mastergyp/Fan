@@ -9,8 +9,59 @@ from grammar.build.FanVisitor import FanVisitor as FanVisitorOriginal
 
 
 class FanLangVisitor(FanVisitorOriginal):
-
     args_map = {}
+
+    def visitInList(self, ctx: FanParser.InListContext):
+        return super().visitInList(ctx)
+
+    def visitString(self, ctx: FanParser.StringContext):
+        return super().visitString(ctx)
+
+    def visitInField(self, ctx: FanParser.InFieldContext):
+        return super().visitInField(ctx)
+
+    def visitNumber(self, ctx: FanParser.NumberContext):
+        if "." not in ctx.NUMBER().getText():
+            return int(ctx.NUMBER().getText())
+        else:
+            return float(ctx.NUMBER().getText())
+
+    def visitBoolean(self, ctx: FanParser.BooleanContext):
+        left = self.visit(ctx.expr(0))
+        right = self.visit(ctx.expr(1))
+
+        boolOpt = ctx.getChild(1).getText()
+
+        if boolOpt == "==":
+            return left == right
+        elif boolOpt == ">":
+            return left > right
+        elif boolOpt == ">=":
+            return left >= right
+        elif boolOpt == "<":
+            return left < right
+        elif boolOpt == "<=":
+            return left <= right
+        elif boolOpt == "!=":
+            return left != right
+
+    def visitIf(self, ctx: FanParser.IfContext):
+        judge = self.visit(ctx.expr(0))
+
+        if judge:
+            return self.visit(ctx.expr(1))
+
+        else:
+
+            return self.visit(ctx.expr(2))
+
+
+
+    def visitBooleanExpr(self, ctx: FanParser.BooleanExprContext):
+        return super().visitBooleanExpr(ctx)
+
+    def visitArray(self, ctx: FanParser.ArrayContext):
+        return super().visitArray(ctx)
 
     def visitProg(self, ctx: FanParser.ProgContext):
         return super().visitProg(ctx)
@@ -19,49 +70,40 @@ class FanLangVisitor(FanVisitorOriginal):
         return super().visitStatements(ctx)
 
     def visitTerminated(self, ctx: FanParser.TerminatedContext):
-        if ctx.expr():
-            result = self.visitExpr(ctx.expr())
-            print("the result is " + str(result))
-        else:
-            result = super().visitTerminated(ctx)
+        result = self.visit(ctx.expr())
         return result
 
     def visitStatement(self, ctx: FanParser.StatementContext):
         return super().visitChildren(ctx)
 
-    def visitExpr(self, ctx: FanParser.ExprContext):
+    def visitMulAndDiv(self, ctx: FanParser.MulAndDivContext):
+        left = self.visit(ctx.expr(0))
+        right = self.visit(ctx.expr(1))
+        if ctx.getChild(1).getText() == "*":
+            return left * right
+        return left / right
 
-        if ctx.INT():
-            return int(ctx.INT().getText())
+    def visitPlusAndMinus(self, ctx: FanParser.PlusAndMinusContext):
+        left = self.visit(ctx.expr(0))
+        right = self.visit(ctx.expr(1))
+        if ctx.getChild(1).getText() == "+":
+            return left + right
+        return left - right
 
-        if ctx.ASSIGN():
-            value = self.visit(ctx.expr(0))
-            self.args_map[ctx.ID().getText()] = value
-            return value
+    def visitAssign(self, ctx: FanParser.AssignContext):
+        value = self.visit(ctx.expr())
+        self.args_map[ctx.ID().getText()] = value
+        return value
 
-        if ctx.ID():
-            if ctx.ID().getText() in self.args_map:
-                return self.args_map[ctx.ID().getText()]
-            else:
-                raise Exception("%s not define" % ctx.getText())
+    def visitId(self, ctx: FanParser.IdContext):
+        return self.args_map.get(ctx.ID().getText(), None)
 
-        if ctx.LPAREN():
-            return self.visit(ctx.expr(0))
+    def visitPower(self, ctx: FanParser.PowerContext):
+        return self.visit(ctx.expr(0)) ** self.visit(ctx.expr(1))
 
-        if ctx.POWER():
-            return self.visitExpr(ctx.expr(0)) ** self.visitExpr(ctx.expr(1))
+    def visitParen(self, ctx: FanParser.ParenContext):
+        return self.visit(ctx.expr())
 
-        if ctx.MINUS() and not ctx.expr(1):
-            return -1 * self.visit(ctx.expr(0))
-
-        if ctx.MUL():
-            return self.visitExpr(ctx.expr(0)) * self.visitExpr(ctx.expr(1))
-
-        if ctx.DIV():
-            return self.visitExpr(ctx.expr(0)) / self.visitExpr(ctx.expr(1))
-
-        if ctx.PLUS():
-            return self.visitExpr(ctx.expr(0)) + self.visitExpr(ctx.expr(1))
-
-        if ctx.MINUS():
-            return self.visitExpr(ctx.expr(0)) - self.visitExpr(ctx.expr(1))
+    def visitPrint(self, ctx: FanParser.PrintContext):
+        print(self.visit(ctx.expr()))
+        return None

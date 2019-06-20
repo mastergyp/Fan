@@ -12,18 +12,55 @@ terminated:
 
 //LEXER RULES
 expr:
-    ID ASSIGN expr
-    |LPAREN expr RPAREN
-    | expr (POWER) expr
-    | MINUS expr
-    | expr (MUL|DIV) expr
-    | expr (MINUS|PLUS) expr
-    | INT
-    | ID;
+    IF expr THEN expr (ELSE expr)?    # If
+    |ID ASSIGN expr                   # Assign
+    |expr (NOT)? IN ID                # InField
+    |expr (NOT)? IN array             # InList
+    |LPAREN expr RPAREN               # Paren
+    |<assoc=right> expr (POWER) expr  # Power
+    |expr (MUL|DIV) expr              # MulAndDiv
+    |expr (MINUS|PLUS) expr           # PlusAndMinus
+    |expr (EQ|NEQ|GT|LT|GTE|LTE) expr # Boolean
+    |expr (AND|OR) expr               # BooleanExpr
+    |NUMBER                           # Number
+    |ID                               # Id
+    |STRING                           # String
+    |PRINT expr                       # Print
+    ;
+
+array: '[' ID (',' ID)* ']'
+      |'[' ']';
+
+STRING: '"' '"'
+       | '"' WORD (WORD)* '"'
+;
 
 // BLOCKS AND ENCLOUSURES
 LPAREN : '(';
 RPAREN : ')';
+
+IF: 'if';
+THEN: 'then';
+ELSE: 'else';
+PRINT: 'print';
+IN: 'in';
+
+// BOOLEAN
+EQ: '==';
+NEQ: '!=';
+GT: '>';
+LT: '<';
+GTE: '>=';
+LTE: '<=';
+
+AND: 'and';
+OR: 'or';
+NOT: 'not';
+
+TRUE: 'True';
+FALSE: 'False';
+
+
 
 
 // KEY SYMBOLS
@@ -40,9 +77,11 @@ POWER:  '^';
 ASSIGN: '=';
 
 // TYPES
-INT: DIGIT+;
+NUMBER: [-] ? ('.' DIGIT+ | DIGIT+ ('.' DIGIT*)? );
 
-ID: [A-Za-z];
+
+
+ID: WORD+;
 
 // COMMENTS RULES
 BLOCK_COMMENT:  DIV MUL .*? MUL DIV -> channel(HIDDEN);
@@ -55,17 +94,6 @@ WS: (' '| '\t')+ -> skip;
 
 
 //FRAGMENTS
-
-fragment LETTER: A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z;
-
-fragment A: 'A' | 'a'; fragment B: 'B' | 'b'; fragment C: 'C' | 'c'; fragment D: 'D' | 'd'; fragment E: 'E' | 'e';
-fragment F: 'F' | 'f'; fragment G: 'G' | 'g'; fragment H: 'H' | 'h'; fragment I: 'I' | 'i'; fragment J: 'J' | 'j';
-fragment K: 'K' | 'k'; fragment L: 'L' | 'l'; fragment M: 'M' | 'm'; fragment N: 'N' | 'n'; fragment O: 'O' | 'o';
-fragment P: 'P' | 'p'; fragment Q: 'Q' | 'q'; fragment R: 'R' | 'r'; fragment S: 'S' | 's'; fragment T: 'T' | 't';
-fragment U: 'U' | 'u'; fragment V: 'V' | 'v'; fragment W: 'W' | 'w'; fragment X: 'X' | 'x'; fragment Y: 'Y' | 'y';
-fragment Z: 'Z' | 'z';
-
-fragment UPPERLETTER: [A-Za-z];
-
 fragment DIGIT: [0-9];
+fragment WORD: ('a' .. 'z' | 'A' .. 'Z' | '0' .. '9'|'\u4E00'..'\u9FA5' | '\uF900'..'\uFA2D');
 
