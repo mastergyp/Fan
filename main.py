@@ -39,5 +39,5 @@ def run(string, data=None):
 
 
 if __name__ == '__main__':
-    print(run_file("scripts/test.fan", data={"总金额": 100.00, "人数": 3}))
-    # print(run("总金额/人数 + 100 > 133.333333333333333 ", data={"总金额": 100.00, "人数": 3}))
+    # print(run_file("scripts/test.fan", data={"总金额": 100.00, "人数": 3}))
+    print(run("总金额/人数 + 100 > 上限 or 总金额 < 50", data={"总金额": 100.00, "人数": 3, "上限": 100}))

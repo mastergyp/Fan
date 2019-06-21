@@ -1,2 +1,3 @@
 .idea
 *__pycache__/*
+grammar/build/__pycache__*

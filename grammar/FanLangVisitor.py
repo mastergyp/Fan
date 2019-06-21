@@ -66,7 +66,12 @@ class FanLangVisitor(FanVisitorOriginal):
             return self.visit(ctx.expr(2))
 
     def visitBooleanExpr(self, ctx: FanParser.BooleanExprContext):
-        return super().visitBooleanExpr(ctx)
+        left = self.visit(ctx.expr(0))
+        right = self.visit(ctx.expr(1))
+        if ctx.getChild(1).getText() == "and":
+            return left and right
+        elif ctx.getChild(1).getText() == "or":
+            return left or right
 
     def visitArray(self, ctx: FanParser.ArrayContext):
         return super().visitArray(ctx)
