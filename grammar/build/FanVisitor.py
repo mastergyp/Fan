@@ -29,6 +29,11 @@ class FanVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by FanParser#Return.
+    def visitReturn(self, ctx:FanParser.ReturnContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by FanParser#InList.
     def visitInList(self, ctx:FanParser.InListContext):
         return self.visitChildren(ctx)

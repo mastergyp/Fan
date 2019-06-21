@@ -12,7 +12,8 @@ terminated:
 
 //LEXER RULES
 expr:
-    IF expr THEN expr (ELSE expr)?    # If
+    STRING                           # String
+    |IF expr THEN expr (ELSE expr)?    # If
     |ID ASSIGN expr                   # Assign
     |expr (NOT)? IN ID                # InField
     |expr (NOT)? IN array             # InList
@@ -24,15 +25,15 @@ expr:
     |expr (AND|OR) expr               # BooleanExpr
     |NUMBER                           # Number
     |ID                               # Id
-    |STRING                           # String
     |PRINT expr                       # Print
+    |RETURN expr                      # Return
     ;
 
 array: '[' ID (',' ID)* ']'
       |'[' ']';
 
 STRING: '"' '"'
-       | '"' WORD (WORD)* '"'
+       | '"' WORD_FOR_STRING (WORD_FOR_STRING)* '"'
 ;
 
 // BLOCKS AND ENCLOUSURES
@@ -44,6 +45,7 @@ THEN: 'then';
 ELSE: 'else';
 PRINT: 'print';
 IN: 'in';
+RETURN: 'return';
 
 // BOOLEAN
 EQ: '==';
@@ -96,4 +98,5 @@ WS: (' '| '\t')+ -> skip;
 //FRAGMENTS
 fragment DIGIT: [0-9];
 fragment WORD: ('a' .. 'z' | 'A' .. 'Z' | '0' .. '9'|'\u4E00'..'\u9FA5' | '\uF900'..'\uFA2D');
+fragment WORD_FOR_STRING: WORD  | ' ' | '\'' | '_';
 

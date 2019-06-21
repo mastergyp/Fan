@@ -9,13 +9,16 @@ from grammar.build.FanVisitor import FanVisitor as FanVisitorOriginal
 
 
 class FanLangVisitor(FanVisitorOriginal):
-    args_map = {}
+
+    def __init__(self, args_map=None):
+        self.args_map = args_map or {}
+        self.return_val = None
 
     def visitInList(self, ctx: FanParser.InListContext):
         return super().visitInList(ctx)
 
     def visitString(self, ctx: FanParser.StringContext):
-        return super().visitString(ctx)
+        return str(ctx.getText()[1: -1])
 
     def visitInField(self, ctx: FanParser.InFieldContext):
         return super().visitInField(ctx)
@@ -33,16 +36,25 @@ class FanLangVisitor(FanVisitorOriginal):
         boolOpt = ctx.getChild(1).getText()
 
         if boolOpt == "==":
+            if isinstance(left, float) or isinstance(right, float):
+                return abs(left - right) < 0.000001
+
             return left == right
         elif boolOpt == ">":
+            if isinstance(left, float) or isinstance(right, float):
+                return left - right > 0.000001
             return left > right
         elif boolOpt == ">=":
             return left >= right
         elif boolOpt == "<":
+            if isinstance(left, float) or isinstance(right, float):
+                return right - left > 0.000001
             return left < right
         elif boolOpt == "<=":
             return left <= right
         elif boolOpt == "!=":
+            if isinstance(left, float) or isinstance(right, float):
+                return abs(left - right) > 0.000001
             return left != right
 
     def visitIf(self, ctx: FanParser.IfContext):
@@ -50,12 +62,8 @@ class FanLangVisitor(FanVisitorOriginal):
 
         if judge:
             return self.visit(ctx.expr(1))
-
         else:
-
             return self.visit(ctx.expr(2))
-
-
 
     def visitBooleanExpr(self, ctx: FanParser.BooleanExprContext):
         return super().visitBooleanExpr(ctx)
@@ -87,6 +95,10 @@ class FanLangVisitor(FanVisitorOriginal):
         left = self.visit(ctx.expr(0))
         right = self.visit(ctx.expr(1))
         if ctx.getChild(1).getText() == "+":
+            if isinstance(left, str):
+                return left + str(right)
+            elif isinstance(right, str):
+                return str(left) + right
             return left + right
         return left - right
 
@@ -105,5 +117,10 @@ class FanLangVisitor(FanVisitorOriginal):
         return self.visit(ctx.expr())
 
     def visitPrint(self, ctx: FanParser.PrintContext):
-        print(self.visit(ctx.expr()))
+        value = self.visit(ctx.expr())
+        print(value)
         return None
+
+    def visitReturn(self, ctx: FanParser.ReturnContext):
+        self.return_val = self.visit(ctx.expr())
+        return self.return_val

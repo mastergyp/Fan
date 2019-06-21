@@ -11,18 +11,33 @@ from grammar.FanLangVisitor import FanLangVisitor
 from antlr4 import *
 
 
-def main(script_name):
-    filepath = f"scripts/{script_name}"
-    inputs = FileStream(filepath)
-    lexer = FanLexer(inputs)
+def run_file(filepath, data=None):
+    lexer = FanLexer(FileStream(filepath, encoding="u8"))
     stream = CommonTokenStream(lexer)
     parser = FanParser(stream)
     tree = parser.prog()
 
-    visitor = FanLangVisitor()
+    visitor = FanLangVisitor(args_map=data)
+    visitor.visit(tree)
+    return visitor.return_val
 
-    return visitor.visit(tree)
+def run(string, data=None):
+
+    if not string.startswith("return "):
+        string = "return " + string
+    if not string.endswith(";"):
+        string = string + ";"
+
+    lexer = FanLexer(InputStream(string))
+    stream = CommonTokenStream(lexer)
+    parser = FanParser(stream)
+    tree = parser.prog()
+
+    visitor = FanLangVisitor(args_map=data)
+    visitor.visit(tree)
+    return visitor.return_val
 
 
 if __name__ == '__main__':
-    main('test.fan')
+    print(run_file("scripts/test.fan", data={"总金额": 100.00, "人数": 3}))
+    # print(run("总金额/人数 + 100 > 133.333333333333333 ", data={"总金额": 100.00, "人数": 3}))

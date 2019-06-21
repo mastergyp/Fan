@@ -44,6 +44,15 @@ class FanListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by FanParser#Return.
+    def enterReturn(self, ctx:FanParser.ReturnContext):
+        pass
+
+    # Exit a parse tree produced by FanParser#Return.
+    def exitReturn(self, ctx:FanParser.ReturnContext):
+        pass
+
+
     # Enter a parse tree produced by FanParser#InList.
     def enterInList(self, ctx:FanParser.InListContext):
         pass
