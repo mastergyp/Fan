@@ -6,7 +6,8 @@
 # @File    : FanLangVisitor.py
 from grammar.build.FanParser import FanParser
 from grammar.build.FanVisitor import FanVisitor as FanVisitorOriginal
-
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 class FanLangVisitor(FanVisitorOriginal):
 
@@ -113,7 +114,11 @@ class FanLangVisitor(FanVisitorOriginal):
         return value
 
     def visitId(self, ctx: FanParser.IdContext):
-        return self.args_map.get(ctx.ID().getText(), None)
+        id_name = ctx.ID().getText()
+        if id_name not in self.args_map:
+            logging.warning("Warning ID: `%s` NOT Defined" % id_name)
+            return None
+        return self.args_map[id_name]
 
     def visitPower(self, ctx: FanParser.PowerContext):
         return self.visit(ctx.expr(0)) ** self.visit(ctx.expr(1))
@@ -129,3 +134,9 @@ class FanLangVisitor(FanVisitorOriginal):
     def visitReturn(self, ctx: FanParser.ReturnContext):
         self.return_val = self.visit(ctx.expr())
         return self.return_val
+
+    def visitTrueFalse(self, ctx: FanParser.TrueFalseContext):
+        if ctx.getChild(0).getText() == "True":
+            return True
+        else:
+            return False

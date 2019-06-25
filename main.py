@@ -21,8 +21,8 @@ def run_file(filepath, data=None):
     visitor.visit(tree)
     return visitor.return_val
 
-def run(string, data=None):
 
+def run(string, data=None):
     if not string.startswith("return "):
         string = "return " + string
     if not string.endswith(";"):
@@ -41,3 +41,5 @@ def run(string, data=None):
 if __name__ == '__main__':
     # print(run_file("scripts/test.fan", data={"总金额": 100.00, "人数": 3}))
     print(run("总金额/人数 + 100 > 上限 or 总金额 < 50", data={"总金额": 100.00, "人数": 3, "上限": 100}))
+
+    # print(run("100/3 == 33.333333333"))

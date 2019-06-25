@@ -23,6 +23,7 @@ expr:
     |expr (MINUS|PLUS) expr           # PlusAndMinus
     |expr (EQ|NEQ|GT|LT|GTE|LTE) expr # Boolean
     |expr (AND|OR) expr               # BooleanExpr
+    |(TRUE|FALSE)                       # TrueFalse
     |NUMBER                           # Number
     |ID                               # Id
     |PRINT expr                       # Print

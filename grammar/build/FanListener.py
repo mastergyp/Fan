@@ -44,6 +44,15 @@ class FanListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by FanParser#TrueFalse.
+    def enterTrueFalse(self, ctx:FanParser.TrueFalseContext):
+        pass
+
+    # Exit a parse tree produced by FanParser#TrueFalse.
+    def exitTrueFalse(self, ctx:FanParser.TrueFalseContext):
+        pass
+
+
     # Enter a parse tree produced by FanParser#Return.
     def enterReturn(self, ctx:FanParser.ReturnContext):
         pass

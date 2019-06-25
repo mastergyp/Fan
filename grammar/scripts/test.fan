@@ -34,3 +34,27 @@ print 总金额/人数;
 print "100除以5等于20 " + (100/5 == 20.);
 
 print 1.0 > 1.00000000000001;
+
+a = 5
+
+print a;
+
+
+
+"rules": [
+    {
+      "rule": "field1/field2 <= 100.00 and field3!=field4 and field5 < 5000",
+      "cris_level": 1,
+    },
+    {
+      "rule": "field1 not in [listid1]",
+      "cris_level": 3,
+    },
+    {
+      "rule": "not_unique([field1, field2, field3]) > 3",
+      "crisis_level": 2
+    },
+    {
+      "rule": "field2 != '' and field1 != '' and field3 != ''",
+      "cris_level": 1
+    }
