@@ -12,8 +12,8 @@ terminated:
 
 //LEXER RULES
 expr:
-    STRING                           # String
-    |IF expr THEN expr (ELSE expr)?    # If
+    STRING                            # String
+    |IF expr THEN expr (ELSE expr)?   # If
     |ID ASSIGN expr                   # Assign
     |expr (NOT)? IN ID                # InField
     |expr (NOT)? IN array             # InList
@@ -24,11 +24,13 @@ expr:
     |expr (EQ|NEQ|GT|LT|GTE|LTE) expr # Boolean
     |expr (AND|OR) expr               # BooleanExpr
     |(TRUE|FALSE)                       # TrueFalse
+    |FUNC LPAREN (expr (',' expr)*)? RPAREN  # FunctionCall
     |NUMBER                           # Number
     |ID                               # Id
     |PRINT expr                       # Print
     |RETURN expr                      # Return
     ;
+
 
 array: '[' ID (',' ID)* ']'
       |'[' ']';
@@ -48,6 +50,7 @@ PRINT: 'print';
 IN: 'in';
 RETURN: 'return';
 
+
 // BOOLEAN
 EQ: '==';
 NEQ: '!=';
@@ -62,6 +65,11 @@ NOT: 'not';
 
 TRUE: 'True';
 FALSE: 'False';
+
+// Function call
+FUNC:
+    '重复数量'
+    ;
 
 
 
