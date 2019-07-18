@@ -1,4 +1,4 @@
-# Generated from /Users/nelson/PycharmProjects/fan/grammar/src/Fan.g4 by ANTLR 4.7.2
+# Generated from /Users/yufan/shared/repos/Fan/grammar/src/Fan.g4 by ANTLR 4.7.2
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .FanParser import FanParser
@@ -71,6 +71,11 @@ class FanVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by FanParser#Assign.
     def visitAssign(self, ctx:FanParser.AssignContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FanParser#FunctionCall.
+    def visitFunctionCall(self, ctx:FanParser.FunctionCallContext):
         return self.visitChildren(ctx)
 
 

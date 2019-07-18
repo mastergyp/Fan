@@ -6,11 +6,15 @@
 # @File    : FanLangVisitor.py
 from grammar.build.FanParser import FanParser
 from grammar.build.FanVisitor import FanVisitor as FanVisitorOriginal
-
+from grammar.funcs import func_dict
 
 class FanLangVisitor(FanVisitorOriginal):
 
     def __init__(self, args_map=None):
+        """
+        visitor init
+        :param args_map: store referenced db info
+        """
         self.args_map = args_map or {}
         self.return_val = None
 
@@ -28,6 +32,13 @@ class FanLangVisitor(FanVisitorOriginal):
             return int(ctx.NUMBER().getText())
         else:
             return float(ctx.NUMBER().getText())
+
+    # Visit a parse tree produced by FanParser#FunctionCall.
+    def visitFunctionCall(self, ctx:FanParser.FunctionCallContext):
+        args = [item.getText() for i, item in enumerate(ctx.getChildren()) if i % 2 == 0]
+        func_name = args.pop(0)
+        func_dict[func_name](*args)
+        return self.visitChildren(ctx)
 
     def visitBoolean(self, ctx: FanParser.BooleanContext):
         left = self.visit(ctx.expr(0))
@@ -113,7 +124,13 @@ class FanLangVisitor(FanVisitorOriginal):
         return value
 
     def visitId(self, ctx: FanParser.IdContext):
-        return self.args_map.get(ctx.ID().getText(), None)
+        """
+        TODO: 获取字段内容
+        :param ctx:
+        :return:
+        """
+        field_name = ctx.ID().getText()
+        return self.args_map.get(field_name, None)
 
     def visitPower(self, ctx: FanParser.PowerContext):
         return self.visit(ctx.expr(0)) ** self.visit(ctx.expr(1))

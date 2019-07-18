@@ -1,4 +1,4 @@
-# Generated from /Users/nelson/PycharmProjects/fan/grammar/src/Fan.g4 by ANTLR 4.7.2
+# Generated from /Users/yufan/shared/repos/Fan/grammar/src/Fan.g4 by ANTLR 4.7.2
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .FanParser import FanParser
@@ -122,6 +122,15 @@ class FanListener(ParseTreeListener):
 
     # Exit a parse tree produced by FanParser#Assign.
     def exitAssign(self, ctx:FanParser.AssignContext):
+        pass
+
+
+    # Enter a parse tree produced by FanParser#FunctionCall.
+    def enterFunctionCall(self, ctx:FanParser.FunctionCallContext):
+        pass
+
+    # Exit a parse tree produced by FanParser#FunctionCall.
+    def exitFunctionCall(self, ctx:FanParser.FunctionCallContext):
         pass
 
 

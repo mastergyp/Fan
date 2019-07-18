@@ -34,10 +34,14 @@ def run(string, data=None):
     tree = parser.prog()
 
     visitor = FanLangVisitor(args_map=data)
+    print(visitor)
     visitor.visit(tree)
     return visitor.return_val
 
 
 if __name__ == '__main__':
     # print(run_file("scripts/test.fan", data={"总金额": 100.00, "人数": 3}))
-    print(run("总金额/人数 + 100 > 上限 or 总金额 < 50", data={"总金额": 100.00, "人数": 3, "上限": 100}))
+    # print(run("总金额/人数 + 100 > 1000 or 总金额 < 50", data={"总金额": 100.00, "人数": 3, "上限": 100}))
+    # print(run("总金额/(人数 + 100)", data={"总金额": 100.00, "人数": 3, "上限": 100}))
+    print(run("重复数量(ARG,d,c,d,e,f);"))
+    # print(run("必填项(ARG,d,c,d,e,f);"))
